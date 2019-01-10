@@ -113,20 +113,18 @@ int aiMove(const char *board, bool turn) {
     exit(-1);
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     char board[10];
     char input[100];
     bool turn; // true = 'X', false = 'O'
     int move, result; // 0 = draw, 1 = 'X' wins, -1 = 'O' wins
-    bool ai = true;
+    bool ai = argc > 1 && strcmp(argv[1], "ai") == 0;
 
 
 
     puts("Tic Tac Toe by Ambros Lins");
     drawBoard("123456789");
-    puts("Press ENTER key to Continue");
-    //getchar();
-
+    puts("Game starts!");
 
     while(true) {
 
@@ -161,6 +159,7 @@ int main() {
         }
 
         drawBoard(board);
+        printf("\n");
 
         if (result == 0) {
             puts("Draw");
