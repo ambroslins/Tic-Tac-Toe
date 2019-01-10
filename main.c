@@ -6,6 +6,7 @@ enum State{Blank, X, O};
 
 
 void drawBoard(const char *board) {
+    printf("\n");
     printf(" %c | %c | %c \n", board[0], board[1], board[2]);
     printf("-----------\n");
     printf(" %c | %c | %c \n", board[3], board[4], board[5]);
@@ -50,37 +51,66 @@ int getResult(const char *board) {
     return 0;
 }
 
+void initBoard(char *board, bool *turn, int *result) {
+    static int games = 0;
+    strcpy(board, "         ");
+    *turn = (bool) (++games & 1);
+    *result = 0;
+}
+
 int main() {
-    char board[] = "         ";
-    bool turn = true; // true = 'X', false = 'O'
-    int move;
-    int result = 0; // 0 = draw, 1 = 'X' wins, 2 = 'O' wins
+    char board[10];
+    char input[100];
+    bool turn; // true = 'X', false = 'O'
+    int move, result; // 0 = draw, 1 = 'X' wins, 2 = 'O' wins
 
-    drawBoard(board);
-    while(!isFinished(board) && result == 0) {
-        printf("%c moves: ", turn ? 'X' : 'O');
-        if(scanf("%d", &move) != 1 || move < 1 || move > 9) {
-            puts("Illegal input");
-            continue;
-        }
 
-        if(!makeMove(board, move, turn)) {
-            puts(("Illegal move"));
-            continue;
-        }
 
-        turn = !turn;
+    puts("Tic Tac Toe by Ambros Lins");
+    drawBoard("123456789");
+    puts("Press ENTER key to Continue");
+    getchar();
+
+
+    while(true) {
+
+        initBoard(board, &turn, &result);
 
         drawBoard(board);
+        while(!isFinished(board) && result == 0) {
+            printf("%c moves: ", turn ? 'X' : 'O');
+            fgets(input, sizeof(input), stdin);
+            if(strcmp(input, "exit\n") == 0) return 0;
+            if(sscanf(input, "%d", &move) != 1 || move < 1 || move > 9) {
+                puts("Illegal input");
+                continue;
+            }
 
-        result = getResult(board);
+            if(!makeMove(board, move, turn)) {
+                puts(("Illegal move"));
+                continue;
+            }
+
+            turn = !turn;
+
+            drawBoard(board);
+
+            result = getResult(board);
+        }
+
+        if (result == 0) {
+            puts("Draw");
+        } else {
+            printf("%c Wins!!!\n\n", result == 1 ? 'X' : 'O');
+        }
+
+        puts("Would you like to play again? (y=yes/n=no)");
+        fgets(input, sizeof(input), stdin);
+        if(!(input[0] == 'y' || input[0] == 'Y')) break;
+
+
     }
 
-    if(result == 0) {
-        puts("Draw");
-    } else {
-        printf("%c Wins!!!", result == 1 ? 'X' : 'O');
-    }
 
     return 0;
 }
