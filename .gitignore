@@ -55,6 +55,5 @@ dkms.conf
 .*/
 
 # CMake
-!CMakeList.txt
 cmake*
-
+!CMakeLists.txt
