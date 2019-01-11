@@ -70,7 +70,7 @@ void initBoard(char *board, bool *turn, int *result) {
 }
 
 int minimax(const char *board, bool turn) {
-    if(isFinished(board)) return getResult(board);
+    if(isFinished(board) || getResult(board) != 0) return getResult(board);
     char newBoard[10];
     int score = turn ? -1 : 1;
     int nextScore;
